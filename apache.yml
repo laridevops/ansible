@@ -1,0 +1,41 @@
+---
+- hosts: db
+  become: yes
+  gather_facts: 0
+
+  tasks:
+    - name: System update
+      yum:
+        name: '*'
+        state: latest
+      tags:
+        - update
+
+    - name: Install HTTPD
+      package:
+        name: httpd
+        state: present
+      tags:
+        - install
+
+    - name: Start/Enable Daemon
+      systemd:
+        name: httpd
+        state: started
+        enabled: yes
+      tags:   
+        - daemon
+
+    - name: Copy index file
+      copy:
+        src: /home/ec2-user/ansible-dev/index.html
+        dest: /var/www/html/index.html
+      tags:
+        - file_copy
+      notify: Restart Apache
+
+  handlers:
+    - name: Restart Apache
+      systemd:
+        name: httpd
+        state: restarted

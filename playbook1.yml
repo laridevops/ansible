@@ -1,0 +1,27 @@
+---
+- hosts: db
+  become: true
+  ignore_errors: yes
+  gather_facts: 1
+  vars:
+    color: red
+
+  tasks:
+  - name: Check num of CPU
+    command: uptime
+    register: uptime_output
+
+  - name: Display output
+    debug:
+      var: uptime_output.rc
+
+  - name: Create file
+    file:
+     path: /home/ec2-user/week3
+     state: touch
+     mode: '0644'
+    register: file_output
+
+  - name: Display output
+    debug:
+     var: color

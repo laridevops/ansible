@@ -1,0 +1,33 @@
+---
+- hosts: all
+  become: true
+  gather_facts: yes
+  ignore_errors: true
+
+  vars:
+    user_name: larrie27
+    group_name: devops
+  vars_files:
+  - variables.yml
+
+  tasks:
+   - name: Time check
+     command: llkkjnnnn
+#     when: ansible_distribution == "larrie" or  ansible_processor_nproc == 2
+
+   - name: User creation
+     user:
+       name: "{{user_name}}"
+       comment: larissa
+       uid: 27
+       group: "{{group_name}}"
+
+   - name: Group creation
+     group:
+       name: "{{group_name}}"
+       state: present
+
+   - name: Package Installation
+     package:
+       name: "{{pkg_name}}"
+       state: present   
